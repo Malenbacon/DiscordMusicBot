@@ -1,7 +1,6 @@
-import { SlashCommandBuilder } from "discord.js";
-
 module.exports = {
-    data: new SlashCommandBuilder().setName('list').setDescription("lista todas as musicas na fila"),
+    name: "!list",
+    help:"",
     async execute(interaction){
         await interaction.reply(`To vivasso ${interaction.user.username}`);
     }

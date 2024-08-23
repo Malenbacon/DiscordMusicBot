@@ -1,7 +1,6 @@
-import { SlashCommandBuilder } from "discord.js";
-
 module.exports = {
-    data: new SlashCommandBuilder().setName('stop').setDescription("Pausa a musica atual"),
+    name: "!name",
+    help:"",
     async execute(interaction){
         await interaction.reply(`Pararão a musica atual`);
     }

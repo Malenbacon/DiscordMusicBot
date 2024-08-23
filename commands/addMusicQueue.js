@@ -1,7 +1,6 @@
-import { SlashCommandBuilder } from "discord.js";
-
 module.exports = {
-    data: new SlashCommandBuilder().setName('add').setDescription("Adiciona a musica na fila"),
+    name: "!add",
+    help:"",
     async execute(interaction){
         
     }

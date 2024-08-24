@@ -1,4 +1,5 @@
-const {eventEmiiter} = require("node:events");
+const {EventEmitter} = require("node:events");
+const removeEvent = new EventEmitter;
 module.exports = {
     name: "!rm",
     help:"Remove uma musica da fila dada certa posicao",

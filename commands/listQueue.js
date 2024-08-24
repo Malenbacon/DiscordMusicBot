@@ -8,7 +8,8 @@ module.exports = {
         let queueMusicNamesStringBuilder = ''
         if(queueMusics.length < 5){
             for(let i = 0; i<queueMusics.length; i++){
-                
+                let name = await ytdl.getInfo()
+                console.log(name);
             }
         }
         await interaction.reply(`To vivasso ${interaction.user.username}`);

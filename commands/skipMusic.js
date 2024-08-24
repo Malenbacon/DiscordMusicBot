@@ -1,6 +1,6 @@
 module.exports = {
     name: "!skip",
-    help:"",
+    help:"Pula a musica atual",
     async execute(interaction){
         await interaction.reply(`Pulei! `);
     }

@@ -1,6 +1,6 @@
 module.exports = {
     name: "!help",
-    help:"",
+    help:"apresenta todos os comandos",
     async execute(interaction){
         
     }

@@ -1,5 +1,4 @@
-const {EventEmitter} = require("node:events");
-const skipEvent = new EventEmitter();
+const skipEvent = require("../services/eventCommandHandle")
 
 module.exports = {
     name: "!skip",

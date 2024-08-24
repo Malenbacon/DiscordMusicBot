@@ -1,5 +1,4 @@
-const {EventEmitter} = require("node:events");
-const stopEvent = new EventEmitter();
+const stopEvent = require("../services/eventCommandHandle")
 
 module.exports = {
     name: "!stop",

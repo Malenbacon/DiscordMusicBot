@@ -1,10 +1,10 @@
 const {EventEmitter} = require("node:events");
-const connectToChannel = require("./voiceConnection")
+const connectToChannel = require("../Connection/voiceConnection.js")
 
 const commandCalled = new EventEmitter();
 
 commandCalled.on("AddedToQueueEmpty", async (interaction) => {connectToChannel(interaction)} );
-commandCalled.once("AddedToQueue", () => {
+commandCalled.on("AddedToQueue", () => {
 
 })
 commandCalled.on("skip", () => {

@@ -1,8 +1,5 @@
 const { queueMusics } = require("../Server");
-
-require("../Server.js");
-
-const addEvent = require("../services/eventCommandHandle")
+const addEvent = require("../src/Handlers/eventCommandHandle.js")
 
 const checkIfIsYoutubeDomain = (url) => {
     try {

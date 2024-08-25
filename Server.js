@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Client, Events, GatewayIntentBits} = require('discord.js');
-const commandHandler = require("./services/commandHandler.js");
+const commandHandler = require("./src/Handlers/commandHandler.js");
 
 const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.MessageContent]});
 let queueMusics = [];

@@ -1,4 +1,4 @@
-const commandMap  = require("./grabAllCommands.js");
+const commandMap  = require("../../services/grabAllCommands.js");
 
 async function commandHandler(mensage)
 {

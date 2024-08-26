@@ -1,19 +1,6 @@
 const { queueMusics } = require("../Server");
 const addEvent = require("../src/Handlers/eventCommandHandle.js")
-
-const checkIfIsYoutubeDomain = (url) => {
-    try {
-        const domain = new URL(url);
-        if(domain.host === "youtu.be" || domain.hostname === "www.youtube.com" || domain.hostname === domain.hostname === "m.youtube.com") return true;
-        return false;
-
-    } catch (error) {
-        console.error("Não foi possivel transformar esse link em URL")
-        return false
-    }
-    
-    
-}
+const checkIfIsYoutubeDomain = require("../services/checkIfIsYoutubeDomain.js")
 
 module.exports = {
     name: "!play",
@@ -43,12 +30,12 @@ module.exports = {
             if(interaction.member.voice.channelId === null) return interaction.reply("Entre em um canal de voz primeiro");
             
             if(queueMusics.length === 0){
-                queueMusics.push(attachments.url);
+                queueMusics.push(attachments);
                 addEvent.emit('AddedToQueueEmpty', interaction);
                 return;
             }
             else if(queueMusics.length !== 0){
-                queueMusics.push(attachments.url)
+                queueMusics.push(attachments)
                 addEvent.emit('AddedToQueue', interaction);
                 return;
             }

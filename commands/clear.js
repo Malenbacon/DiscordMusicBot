@@ -1,4 +1,5 @@
 const clearEvent = require('../src/Handlers/eventCommandHandle.js')
+const {getVoiceConnection} = require('@discordjs/voice')
 
 module.exports = {
     name: "!clear",
@@ -6,7 +7,6 @@ module.exports = {
     async execute(interaction){
         const voiceConnection = getVoiceConnection(interaction.guildId);
         if(!voiceConnection) return interaction.reply("Nao estou nem na call brother")
-        stopEvent.emit("clear");
-        await interaction.reply(`Exluindo todas musicas que iriam ser tocadas...`);
+        clearEvent.emit("clear");
     }
 };

@@ -13,4 +13,4 @@ client.on(Events.MessageCreate, (mensage) => {commandHandler(mensage)})
 
 client.login(process.env.TOKEN);
 
-module.exports = {queueMusics, stackHistoryMusic};
+module.exports = {queueMusics, stackHistoryMusic, client};

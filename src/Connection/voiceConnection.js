@@ -1,8 +1,6 @@
-const {joinVoiceChannel, createAudioPlayer, VoiceConnectionStatus, AudioPlayerStatus} = require("@discordjs/voice")
-const ytdl = require("ytdl-core");
+const {joinVoiceChannel, getVoiceConnection} = require("@discordjs/voice")
+const {voiceEmitter} = require('../Connection/beginPlayMusic')
 
-
-const player = createAudioPlayer()
 
 const connectToChannel = async (interaction) => {
     try 
@@ -13,10 +11,12 @@ const connectToChannel = async (interaction) => {
             adapterCreator: interaction.member.voice.channel.guild.voiceAdapterCreator,
         });
 
-        return interaction.reply(`Tocando: `)
+        voiceEmitter.emit('beginPlay', interaction);
 
     } catch (e) {
-        const connection = getVoiceConnection(interaction.member.voice.channel.guildId);
+        const connection = getVoiceConnection(interaction.guildId);
+        connection.destroy();
+        return interaction.reply("Ouve um erro na conexão... tente denovo")
     }
 }
 

@@ -1,4 +1,5 @@
 const {getVoiceConnection} = require('@discordjs/voice')
+let {queueMusics} = require('../Server')
 
 module.exports = {
     name: "!quit",
@@ -7,6 +8,7 @@ module.exports = {
         const voiceConnection = getVoiceConnection(interaction.guildId);
         if(!voiceConnection) return interaction.reply("Nao estou nem na call brother")
         voiceConnection.destroy();
+        queueMusics = []
         await interaction.reply(`Saindo...`);
     }
 };

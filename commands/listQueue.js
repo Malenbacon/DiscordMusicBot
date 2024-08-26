@@ -1,5 +1,6 @@
 const ytdl = require("ytdl-core")
 const {queueMusics} = require("../Server.js")
+const checkIfIsYoutubeDomain = require("../services/checkIfIsYoutubeDomain.js")
 
 module.exports = {
     name: "!list",
@@ -10,8 +11,16 @@ module.exports = {
         let queueMusicNamesStringBuilder = ''
         if(queueMusics.length < 5){
             for(let i = 0; i<=queueMusics.length; i++){
-                let videoInfo = (await ytdl.getInfo(queueMusics[i])).videoDetails;
-                queueMusicNamesStringBuilder += `${videoInfo.title} - ${videoInfo.lengthSeconds}s \n `
+                if(checkIfIsYoutubeDomain(queueMusics[i]))
+                { 
+                    let videoInfo = (await ytdl.getInfo(queueMusics[i])).videoDetails;
+                    queueMusicNamesStringBuilder += `${videoInfo.title} - ${videoInfo.lengthSeconds}s \n `
+                }
+                else 
+                {
+                    queueMusicNamesStringBuilder += ` Musica adicionada por envio (sem info) \n `
+                }
+
             }
         }
         if(queueMusics.length >= 5){

@@ -7,7 +7,7 @@ module.exports = {
     async execute(interaction){
         const voiceConnection = getVoiceConnection(interaction.guildId);
         if(!voiceConnection) return interaction.reply("Nao estou nem na call brother")
-        skipEvent.emit("skip")
-        await interaction.reply(`Pulei! `);
+        skipEvent.emit("skip", interaction)
+        return;
     }
 };

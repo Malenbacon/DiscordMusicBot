@@ -1,1 +1,3 @@
-Um bot de musica do discord
+Um bot de musica do discord, atualmente aceita apenas arquivos mp3 (devido a bibliioteca ytdl-core nao estar funcionando).
+
+isso é um projeto de estudos, nao tente usar esse bot de forma alguma em algum server.

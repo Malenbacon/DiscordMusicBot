@@ -2,7 +2,6 @@ const commandMap  = require("../../services/grabAllCommands.js");
 
 async function commandHandler(mensage)
 {
-    if(mensage.channel.id != "794774527744671764") return; 
     if(mensage.author.bot) return;
     let allCommands = commandMap();
     let mensageStriped = mensage.content.split(" ")

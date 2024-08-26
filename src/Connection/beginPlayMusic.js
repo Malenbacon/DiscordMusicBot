@@ -1,6 +1,8 @@
-const {getVoiceConnection, createAudioPlayer, createAudioResource, AudioPlayerStatus} = require('@discordjs/voice')
-const {queueMusics, client} = require('../../Server.js')
+const {getVoiceConnection, createAudioPlayer, createAudioResource, AudioPlayerStatus, entersState} = require('@discordjs/voice')
+let {queueMusics, client} = require('../../Server.js')
 const voiceEmitter = require("../Handlers/voiceConnectionEventHandler.js")
+let actualPlayer;
+let paused = false;
 
 const playMusic = (interaction) => {
   try {
@@ -10,10 +12,16 @@ const playMusic = (interaction) => {
       connection.subscribe(audioPlayer);
       let resorce =  createAudioResource(queueMusics[0].url);
       audioPlayer.play(resorce);
+      actualPlayer = audioPlayer;
 
-      audioPlayer.on(AudioPlayerStatus.Idle , (old, newState) => {
-        console.log("acabou a musica")
-        voiceEmitter.emit('skip', interaction)
+      audioPlayer.on(AudioPlayerStatus.Idle , async(old, newState) => {
+        try {
+          await entersState(audioPlayer, AudioPlayerStatus.Playing, 100.0)
+
+        } catch (error) {
+          voiceEmitter.emit('skip' , interaction)
+        }
+       
       })
 
       // voiceEmitter.on('pause', (interaction) => {
@@ -23,11 +31,11 @@ const playMusic = (interaction) => {
       // voiceEmitter.on('resume', (interaction) => {
       //   audioPlayer.pause();
       // })
-    
+      
+      
       interaction.reply(`tocando: ${queueMusics[0].name} `)
     }
     else {
-      console.log(interaction)
       const channel = client.channels.cache.get(interaction.channelId)
       channel.send("Não há nenhuma musica na fila")
 
@@ -37,6 +45,17 @@ const playMusic = (interaction) => {
     console.log(error)
   }
 }
+
+voiceEmitter.on('clear', () => {
+  queueMusics = [];
+  actualPlayer.stop();
+})
+
+voiceEmitter.on('pause', () => {
+  if(!paused) {actualPlayer.pause(); paused = true}
+  else if(paused) {actualPlayer.unpause(); paused = false}
+ 
+})
 
 voiceEmitter.on('beginPlay', (interaction) => {
   playMusic(interaction)

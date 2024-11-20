@@ -5,7 +5,7 @@ const checkIfIsYoutubeDomain = (url) => {
         return false;
 
     } catch (error) {
-        console.error("Não foi possivel transformar esse link em URL")
+        // console.error("Não foi possivel transformar esse link em URL")
         return false
     }
     

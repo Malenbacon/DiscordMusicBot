@@ -1,4 +1,3 @@
-const ytdl = require("ytdl-core")
 const {queueMusics} = require("../Server.js")
 const checkIfIsYoutubeDomain = require("../services/checkIfIsYoutubeDomain.js")
 

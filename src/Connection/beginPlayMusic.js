@@ -4,21 +4,18 @@ const voiceEmitter = require("../Handlers/voiceConnectionEventHandler.js")
 const checkIfIsYoutubeDomain = require("../../services/checkIfIsYoutubeDomain.js");
 const ytdl = require("@distube/ytdl-core");
 const prism = require("prism-media");
-const fs = require('node:fs')
 
 let actualPlayer;
 
 const playMusic = async (interaction) => {
   try {
-    ytdl("http://www.youtube.com/watch?v=aqz-KE-bpKQ").pipe(require("fs").createWriteStream("video.mp4"));
     if(queueMusics.length !== 0){
       const audioPlayer = createAudioPlayer();
       const connection = getVoiceConnection(interaction.guildId);
       connection.subscribe(audioPlayer);
       if(checkIfIsYoutubeDomain(queueMusics[0])){
-        let stream = await ytdl(queueMusics[0], {format: "mp4"}).pipe(fs.createWriteStream('video.mp4'));
-        console.log(stream);
-        let resource = createAudioResource(stream, { inputType: StreamType.Opus });
+        let stream =  ytdl(queueMusics[0], { filter: 'audioonly'});
+        let resource = createAudioResource(stream, { inputType: StreamType.WebmOpus});
         audioPlayer.play(resource);
         interaction.reply(`tocando: ${(await ytdl.getInfo(queueMusics[0])).videoDetails.title} `)
       }

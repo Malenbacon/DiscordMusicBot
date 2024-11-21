@@ -1,5 +1,11 @@
-a music bot using discord.js, at the moment only suport musics send by attachments in mensages (because ytdl-core is not working, when come back i want to implement youtube link support)
+a music bot using discord.js that suports youtube links and mp3 file attachments
 
-this is a study project, please do not try to use this bot seriously.
+Todo list:
+- ~~Read commands in chat~~
+- ~~Play mp3 files~~
+- ~~Play youtube links~~-
+- play musics when only give the title
+- clear queue command
+- pause commmand
+- UI
 
-only the core funcionaly (play music, queue system and skip music) work like intended right now

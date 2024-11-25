@@ -3,9 +3,7 @@ let {queueMusics, client} = require('../../Server.js')
 const voiceEmitter = require("../Handlers/voiceConnectionEventHandler.js")
 const checkIfIsYoutubeDomain = require("../../services/checkIfIsYoutubeDomain.js");
 const ytdl = require("@distube/ytdl-core");
-const prism = require("prism-media");
-
-let actualPlayer;
+const prism = require('prism-media')
 
 const playMusic = async (interaction) => {
   try {
@@ -14,15 +12,23 @@ const playMusic = async (interaction) => {
       const connection = getVoiceConnection(interaction.guildId);
       connection.subscribe(audioPlayer);
       if(checkIfIsYoutubeDomain(queueMusics[0])){
-        let stream =  ytdl(queueMusics[0], { filter: 'audioonly'});
-        let resource = createAudioResource(stream, { inputType: StreamType.WebmOpus});
-        audioPlayer.play(resource);
-        interaction.reply(`tocando: ${(await ytdl.getInfo(queueMusics[0])).videoDetails.title} `)
-      }
+          let stream =  ytdl(queueMusics[0], { filter: 'audioonly'});
+          let transcoder = new prism.FFmpeg({
+            args: [
+              '-analyzeduration', '0',
+              '-loglevel', '0',
+              '-f', 's16le',
+              '-ar', '48000',
+              '-ac', '2',
+            ]
+          })
+          let resource = createAudioResource(stream.pipe(transcoder), { inputType: StreamType.Raw});
+          audioPlayer.play(resource);
+          interaction.reply(`tocando: ${(await ytdl.getInfo(queueMusics[0])).videoDetails.title} `);
+        }
       else{
         let resorce = createAudioResource(queueMusics[0]);
         audioPlayer.play(resorce);
-        
       }
       // actualPlayer = audioPlayer;
 
@@ -35,16 +41,6 @@ const playMusic = async (interaction) => {
         }
        
       })
-
-      // voiceEmitter.on('pause', (interaction) => {
-      //   audioPlayer.pause();
-      // })
-
-      // voiceEmitter.on('resume', (interaction) => {
-      //   audioPlayer.pause();
-      // })
-      
-      
       
     }
     else {
@@ -57,17 +53,6 @@ const playMusic = async (interaction) => {
     console.log(error)
   }
 }
-
-voiceEmitter.on('clear', () => {
-  queueMusics = [];
-  actualPlayer.stop();
-})
-
-voiceEmitter.on('pause', () => {
-  if(!paused) {actualPlayer.pause(); paused = true}
-  else if(paused) {actualPlayer.unpause(); paused = false}
- 
-})
 
 voiceEmitter.on('beginPlay', (interaction) => {
   playMusic(interaction)

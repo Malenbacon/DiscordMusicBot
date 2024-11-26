@@ -1,5 +1,6 @@
 const {queueMusics} = require("../Server.js")
 const checkIfIsYoutubeDomain = require("../services/checkIfIsYoutubeDomain.js")
+const ytdl = require('@distube/ytdl-core')
 
 module.exports = {
     name: "!list",
@@ -9,15 +10,16 @@ module.exports = {
         if(queueMusics.length === 0) return interaction.reply("Nao há nenhuma musica na fila nesse momento")
         let queueMusicNamesStringBuilder = ''
         if(queueMusics.length < 5){
-            for(let i = 0; i<=queueMusics.length; i++){
+            for(let i = 0; i<queueMusics.length; i++){
                 if(checkIfIsYoutubeDomain(queueMusics[i]))
                 { 
-                    let videoInfo = (await ytdl.getInfo(queueMusics[i])).videoDetails;
+                    let videoInfo = (await ytdl.getBasicInfo(queueMusics[i])).videoDetails;
                     queueMusicNamesStringBuilder += `${videoInfo.title} - ${videoInfo.lengthSeconds}s \n `
                 }
                 else 
                 {
-                    queueMusicNamesStringBuilder += ` Musica adicionada por envio (sem info) \n `
+                    console.log(queueMusics[i])
+                    queueMusicNamesStringBuilder += `Musica adicionada por envio (sem info) \n `
                 }
 
             }
@@ -29,5 +31,6 @@ module.exports = {
             }
             
         }
+        interaction.reply(queueMusicNamesStringBuilder);
     }
 };

@@ -1,4 +1,4 @@
-const pauseEvent = require("../src/Handlers/eventCommandHandle.js");
+const pauseEvent = require("../src/Handlers/voiceConnectionEventHandler");
 const {getVoiceConnection} = require('@discordjs/voice')
 
 module.exports = {

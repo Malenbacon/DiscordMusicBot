@@ -14,10 +14,10 @@ const playMusic = async (interaction) => {
       const connection = getVoiceConnection(interaction.guildId);
       connection.subscribe(audioPlayer);
       if(checkIfIsYoutubeDomain(queueMusics[0])){
-          let stream =  ytdl(queueMusics[0], { filter: 'audioonly', quality:'highestaudio', dlChunkSize: 1024*1024*50});
+          let stream =  await ytdl(queueMusics[0], { filter: 'audioonly', quality:'highestaudio', dlChunkSize: 1024*1024*50});
           let resource = createAudioResource(stream, { inputType: StreamType.Arbitrary});
           audioPlayer.play(resource);
-          interaction.reply(`tocando: ${(await ytdl.getInfo(queueMusics[0])).videoDetails.title} `);
+          interaction.reply(`tocando: ${(await ytdl.getBasicInfo(queueMusics[0])).videoDetails.title} `);
         }
       else{
         let resorce = createAudioResource(queueMusics[0]);
@@ -62,6 +62,11 @@ voiceEmitter.on('pause', (interaction) => {
     actualPlayer.unpause();
     paused = false;
   }
+})
+
+voiceEmitter.on('beginPlayClear', (interaction) => {
+  actualPlayer.stop();
+  playMusic(interaction)
 })
 
 module.exports = {playMusic, voiceEmitter}

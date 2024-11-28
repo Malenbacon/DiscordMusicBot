@@ -1,4 +1,4 @@
-const clearEvent = require('../src/Handlers/eventCommandHandle.js')
+const clearEvent = require('../src/Handlers/voiceConnectionEventHandler.js')
 const {getVoiceConnection} = require('@discordjs/voice')
 
 module.exports = {

@@ -3,7 +3,6 @@ let {queueMusics, client} = require('../../Server.js')
 const voiceEmitter = require("../Handlers/voiceConnectionEventHandler.js")
 const checkIfIsYoutubeDomain = require("../../services/checkIfIsYoutubeDomain.js");
 const ytdl = require("@distube/ytdl-core");
-const pause = require('./Pause.js');
 let paused = false;
 let actualPlayer = null
 

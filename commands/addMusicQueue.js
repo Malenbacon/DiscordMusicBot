@@ -16,7 +16,7 @@ module.exports = {
             if(checkIfIsYoutubeDomain(mensagem[1])){
                 if(ytpl.validateID(mensagem[1])){
                     let url = new URLSearchParams(mensagem[1])
-                    let response  = await ytpl(mensagem[1], {limit:500})
+                    let response  = await ytpl(mensagem[1], {limit:50})
                     for(let videoInfo of response.items){
                         queueMusics.push(videoInfo.url)
                     }

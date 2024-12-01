@@ -9,28 +9,20 @@ module.exports = {
     
         if(queueMusics.length === 0) return interaction.reply("Nao há nenhuma musica na fila nesse momento")
         let queueMusicNamesStringBuilder = ''
-        if(queueMusics.length < 5){
-            for(let i = 0; i<queueMusics.length; i++){
-                if(checkIfIsYoutubeDomain(queueMusics[i]))
-                { 
-                    let videoInfo = (await ytdl.getBasicInfo(queueMusics[i])).videoDetails;
-                    queueMusicNamesStringBuilder += `${videoInfo.title} - ${videoInfo.lengthSeconds}s \n `
-                }
-                else 
-                {
-                    console.log(queueMusics[i])
-                    queueMusicNamesStringBuilder += `Musica adicionada por envio (sem info) \n `
-                }
+            for(let i = 0; i < 10 ; i++){
+                if(i >= queueMusics.length) {
+                    break;
+                };
+                if(!checkIfIsYoutubeDomain(queueMusics[i])) {queueMusicNamesStringBuilder += `Musica adicionada por envio (sem info) \n `; continue;}
+                let videoInfo = (await ytdl.getBasicInfo(queueMusics[i])).videoDetails;
+                let tempoSeg = videoInfo.lengthSeconds
+                let tempoMin = Math.ceil(tempoSeg / 60); tempoSeg %= 60;
+                queueMusicNamesStringBuilder += `${videoInfo.title} - *${tempoMin}m ${tempoSeg}s* \n`
 
             }
-        }
-        if(queueMusics.length >= 5){
-            for(let i = 0; i<5; i++){
-                let videoInfo = (await ytdl.getInfo(queueMusics[i])).videoDetails;
-                queueMusicNamesStringBuilder += `${videoInfo.title} - ${videoInfo.lengthSeconds}s \n`
+            if(queueMusics.length >= 10){
+                queueMusicNamesStringBuilder += '...'
             }
-            
-        }
         interaction.reply(queueMusicNamesStringBuilder);
     }
 };

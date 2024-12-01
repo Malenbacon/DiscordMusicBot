@@ -6,7 +6,7 @@ Todo list:
 - ~~Play youtube links~~ 
 - ~~clear queue command~~
 - ~~pause commmand~~
-- Playlists support
+- ~~Playlists support~~
 - play musics when only give the title
 - UI
 

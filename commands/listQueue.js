@@ -16,7 +16,7 @@ module.exports = {
                 if(!checkIfIsYoutubeDomain(queueMusics[i])) {queueMusicNamesStringBuilder += `Musica adicionada por envio (sem info) \n `; continue;}
                 let videoInfo = (await ytdl.getBasicInfo(queueMusics[i])).videoDetails;
                 let tempoSeg = videoInfo.lengthSeconds
-                let tempoMin = Math.ceil(tempoSeg / 60); tempoSeg %= 60;
+                let tempoMin = Math.floor(tempoSeg / 60); tempoSeg %= 60;
                 queueMusicNamesStringBuilder += `${videoInfo.title} - *${tempoMin}m ${tempoSeg}s* \n`
 
             }

@@ -1,6 +1,7 @@
 const { queueMusics } = require("../Server");
 const addEvent = require("../src/Handlers/eventCommandHandle.js")
 const checkIfIsYoutubeDomain = require("../services/checkIfIsYoutubeDomain.js")
+const ytpl = require('@distube/ytpl')
 
 module.exports = {
     name: "!play",
@@ -11,17 +12,25 @@ module.exports = {
         
         if(attachments === undefined){
             let mensagem = interaction.content.split(" ");
-            if(mensagem[1] == undefined) return interaction.reply("Voce deve oferecer um link do youtube valido após o add");
+            if(mensagem[1] == undefined) return interaction.reply("Voce deve oferecer um link do youtube valido após o play");
             if(checkIfIsYoutubeDomain(mensagem[1])){
-                if(queueMusics.length === 0){
-                queueMusics.push(mensagem[1]);
-                addEvent.emit('AddedToQueueEmpty', interaction);
-                return;
+                if(ytpl.validateID(mensagem[1])){
+                    let url = new URLSearchParams(mensagem[1])
+                    let response  = await ytpl(mensagem[1], {limit:500})
+                    for(let videoInfo of response.items){
+                        queueMusics.push(videoInfo.url)
+                    }
+                    if(url.has("index")){
+                        for(let i = 0; i< url.get("index") - 1;i++){
+                            queueMusics.shift();
+                        }
+                    }
                 }
-                else if(queueMusics.length !== 0){
-                    queueMusics.push(mensagem[1]);
-                    addEvent.emit('AddedToQueue', interaction);
+                else{
+
+                    queueMusics.push(mensagem[1])     
                 }
+                addEvent.emit('AddedToQueue', interaction);
             } 
             else {
                 return interaction.reply("O link deve ser do youtube!")

@@ -13,11 +13,11 @@ module.exports = {
                 if(i >= queueMusics.length) {
                     break;
                 };
-                if(!checkIfIsYoutubeDomain(queueMusics[i])) {queueMusicNamesStringBuilder += `Musica adicionada por envio (sem info) \n `; continue;}
+                if(!checkIfIsYoutubeDomain(queueMusics[i])) {queueMusicNamesStringBuilder += `${i} - Musica adicionada por envio (sem info) \n `; continue;}
                 let videoInfo = (await ytdl.getBasicInfo(queueMusics[i])).videoDetails;
                 let tempoSeg = videoInfo.lengthSeconds
                 let tempoMin = Math.floor(tempoSeg / 60); tempoSeg %= 60;
-                queueMusicNamesStringBuilder += `${videoInfo.title} - *${tempoMin}m ${tempoSeg}s* \n`
+                queueMusicNamesStringBuilder += `${i} - ${videoInfo.title} - *${tempoMin}m ${tempoSeg}s* \n`
 
             }
             if(queueMusics.length >= 10){

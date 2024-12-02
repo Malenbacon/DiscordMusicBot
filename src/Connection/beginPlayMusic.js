@@ -4,11 +4,13 @@ const voiceEmitter = require("../Handlers/voiceConnectionEventHandler.js")
 const checkIfIsYoutubeDomain = require("../../services/checkIfIsYoutubeDomain.js");
 const ytdl = require("@distube/ytdl-core");
 let paused = false;
-let actualPlayer = null
+let stopped = false;
 
 const playMusic = async (interaction) => {
+  const channel = client.channels.cache.get(interaction.channelId)
   try {
     if(queueMusics.length !== 0){
+      stopped = false;
       const audioPlayer = createAudioPlayer();
       const connection = getVoiceConnection(interaction.guildId);
       connection.subscribe(audioPlayer);
@@ -16,7 +18,7 @@ const playMusic = async (interaction) => {
           let stream =  await ytdl(queueMusics[0], { filter: 'audioonly', quality:'highestaudio', dlChunkSize: 1024*1024*50});
           let resource = createAudioResource(stream, { inputType: StreamType.Arbitrary});
           audioPlayer.play(resource);
-          interaction.reply(`tocando: ${(await ytdl.getBasicInfo(queueMusics[0])).videoDetails.title} `);
+          channel.send(`tocando: ${(await ytdl.getBasicInfo(queueMusics[0])).videoDetails.title} `);
         }
       else{
         let resorce = createAudioResource(queueMusics[0]);
@@ -26,17 +28,25 @@ const playMusic = async (interaction) => {
 
       audioPlayer.on(AudioPlayerStatus.Idle , async(old, newState) => {
         try {
-          await entersState(audioPlayer, AudioPlayerStatus.Buffering, 100.0)
+          if(!stopped) await entersState(audioPlayer, AudioPlayerStatus.Buffering, 50.0);
 
         } catch (error) {
           voiceEmitter.emit('skip' , interaction)
         }
        
       })
+      audioPlayer.on(AudioPlayerStatus.Idle , async(old, newState) => {
+        try {
+          await entersState(audioPlayer, AudioPlayerStatus.Playing, 900000);
+
+        } catch (error) {
+          voiceEmitter.emit('quit' , interaction)
+        }
+       
+      })
       
     }
     else {
-      const channel = client.channels.cache.get(interaction.channelId)
       channel.send("Não há nenhuma musica na fila")
       const connection = getVoiceConnection(interaction.guildId);
       connection.dispatchAudio();
@@ -65,7 +75,16 @@ voiceEmitter.on('pause', (interaction) => {
 
 voiceEmitter.on('beginPlayClear', (interaction) => {
   actualPlayer.stop();
+  stopped = true;
   playMusic(interaction)
+})
+
+voiceEvents.on("quit", async(interaction)=> {
+  voiceConnection.destroy(); 
+  while(queueMusics.length > 0){
+    queueMusics.pop();
+  }
+  channel.send(`Saindo...`);
 })
 
 module.exports = {playMusic, voiceEmitter}

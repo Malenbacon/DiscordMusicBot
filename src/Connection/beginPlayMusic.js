@@ -79,7 +79,7 @@ voiceEmitter.on('beginPlayClear', (interaction) => {
   playMusic(interaction)
 })
 
-voiceEvents.on("quit", async(interaction)=> {
+voiceEmitter.on("quit", async(interaction)=> {
   voiceConnection.destroy(); 
   while(queueMusics.length > 0){
     queueMusics.pop();

@@ -15,7 +15,7 @@ const playMusic = async (interaction) => {
       const connection = getVoiceConnection(interaction.guildId);
       connection.subscribe(audioPlayer);
       if(checkIfIsYoutubeDomain(queueMusics[0])){
-          let stream =  await ytdl(queueMusics[0], { filter: 'audioonly', quality:'highestaudio', dlChunkSize: 1024*1024*50});
+          let stream =  await ytdl(queueMusics[0], { filter: 'audioonly', quality:'highestaudio', dlChunkSize: 1024*1024*10});
           let resource = createAudioResource(stream, { inputType: StreamType.Arbitrary});
           audioPlayer.play(resource);
           channel.send(`tocando: ${(await ytdl.getBasicInfo(queueMusics[0])).videoDetails.title} `);

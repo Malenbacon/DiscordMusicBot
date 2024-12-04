@@ -10,8 +10,8 @@ const playMusic = async (interaction) => {
   const channel = client.channels.cache.get(interaction.channelId)
   try {
     if(queueMusics.length !== 0){
+      let audioPlayer = createAudioPlayer();
       stopped = false;
-      const audioPlayer = createAudioPlayer();
       const connection = getVoiceConnection(interaction.guildId);
       connection.subscribe(audioPlayer);
       if(checkIfIsYoutubeDomain(queueMusics[0])){
@@ -40,7 +40,7 @@ const playMusic = async (interaction) => {
           await entersState(audioPlayer, AudioPlayerStatus.Playing, 900000);
 
         } catch (error) {
-          voiceEmitter.emit('quit' , interaction)
+          voiceEmitter.emit('quitInativo' , interaction)
         }
        
       })
@@ -75,16 +75,36 @@ voiceEmitter.on('pause', (interaction) => {
 
 voiceEmitter.on('beginPlayClear', (interaction) => {
   actualPlayer.stop();
+  console.log(actualPlayer);
   stopped = true;
   playMusic(interaction)
+  voiceEmitter.emit("quitClear", interaction)
+})
+voiceEmitter.on('quitClear', (interaction) => {
+  const voiceConnection = getVoiceConnection(interaction.guildId);
+  const channel = client.channels.cache.get(interaction.channelId)
+  voiceConnection.destroy(); 
+  channel.send(`Adicione alguma outra musica com !play`);
 })
 
+
 voiceEmitter.on("quit", async(interaction)=> {
+  const voiceConnection = getVoiceConnection(interaction.guildId);
+  const channel = client.channels.cache.get(interaction.channelId)
   voiceConnection.destroy(); 
   while(queueMusics.length > 0){
     queueMusics.pop();
   }
   channel.send(`Saindo...`);
+})
+voiceEmitter.on("quitInativo", async(interaction)=> {
+  const voiceConnection = getVoiceConnection(interaction.guildId);
+  const channel = client.channels.cache.get(interaction.channelId)
+  voiceConnection.destroy(); 
+  while(queueMusics.length > 0){
+    queueMusics.pop();
+  }
+  channel.send(`Saindo devido a inatividade...`);
 })
 
 module.exports = {playMusic, voiceEmitter}

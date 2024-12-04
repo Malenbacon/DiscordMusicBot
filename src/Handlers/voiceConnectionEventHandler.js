@@ -22,10 +22,11 @@ voiceEvents.on('clear', async(interaction) => {
 
 voiceEvents.on("remove", async(interaction)=>{
     let mensagem = interaction.content.split(" ");
+    if(mensagem[1] == undefined) return interaction.reply("De um valor numerico da posição da musica na fila, caso precise use o !list");
     let position = Number(mensagem[1]);
     if(position == NaN) return interaction.reply("De um valor numerico da posição da musica na fila, caso precise use o !list");
     if(position > queueMusics.length || position <= 0) return interaction.reply("De um valor numerico da posição da musica na fila, caso precise use o !list");
-    if(position === 1) voiceEvents.emit('skip');
+    if(position === 1) voiceEvents.emit('skip',interaction);
     else if(position !== 1){
         queueMusics.splice(position-1,1);
         return interaction.reply("Removido!");
